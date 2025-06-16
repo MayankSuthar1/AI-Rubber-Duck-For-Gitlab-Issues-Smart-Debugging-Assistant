@@ -35,8 +35,8 @@ AI Rubber Duck is an intelligent debugging companion that integrates directly in
 
 ### Demo & Links
 **🎬 Demo Video**: [YouTube Link] (< 3 minutes)  
-**🌐 Website**: [https://rubber-duck-ai-957711343120.us-central1.run.app/]
-**🎮 Live Demo**: [https://gitlab.com/MayankSuthar1/test_error_repo_hackathon/-/issues]
+**🌐 Website**: [[Ai Rubber Duck For Gitlab's Issues](https://rubber-duck-ai-957711343120.us-central1.run.app/)]
+**🎮 Live Demo**: [[Demo Gitlab Repo With Issues and Webhook Configured](https://gitlab.com/MayankSuthar1/test_error_repo_hackathon/-/issues)]
 
 
 ---
@@ -50,7 +50,7 @@ To enable the AI Rubber Duck functionality in your GitLab project:
    - Go to your GitLab project → **Settings** → **Webhooks**
 
 2. **Configure Webhook Details**
-   - **URL**: `https://your-domain.com/webhook` (or ngrok URL for testing)
+   - **URL**: `https://rubber-duck-ai-957711343120.us-central1.run.app/webhook` (or ngrok URL for testing)
    - **Secret Token**: Use same value as `GITLAB_WEBHOOK_SECRET` should be `nkcuxx7uvUsywxT`
    - **Trigger Events**: Enable the following:
      - ✅ Issues events
@@ -275,7 +275,7 @@ AI provides deeper analysis → Solution discovered → AI congratulates and sum
 
 ## Submission Links
 
-**📂 Source Code**: [GitHub Repository URL]  
+**📂 Source Code**: [[GitHub Repository URL](https://github.com/MayankSuthar1/ai-Rubber-Duck-For-Gitlab-Issues-Smart-Debugging-Assistant)]  
 **📋 Devpost**: [Hackathon Submission URL]
 
 ---
