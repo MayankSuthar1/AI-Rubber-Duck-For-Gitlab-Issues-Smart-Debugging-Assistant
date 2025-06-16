@@ -35,7 +35,8 @@ AI Rubber Duck is an intelligent debugging companion that integrates directly in
 
 ### Demo & Links
 **🎬 Demo Video**: [YouTube Link] (< 3 minutes)  
-**🌐 Live Demo**: [Hosted Application URL]
+**🌐 Website**: [https://rubber-duck-ai-957711343120.us-central1.run.app/]
+**🎮 Live Demo**: [https://gitlab.com/MayankSuthar1/test_error_repo_hackathon/-/issues]
 
 
 ---
