@@ -32,11 +32,6 @@ AI Rubber Duck is an intelligent debugging companion that integrates directly in
 - **Backend**: Python Flask, python-gitlab library
 - **Platform**: Web-based service
 
-### Hackathon Compliance
-✅ **GitLab Challenge**: AI-enabled app using GitLab and Google Cloud  
-✅ **Original Work**: Built from scratch during contest period  
-✅ **Required Tech**: Uses only Google Cloud AI and GitLab products  
-✅ **Web Platform**: Accessible via web browser  
 
 ### Demo & Links
 **🎬 Demo Video**: [YouTube Link] (< 3 minutes)  
@@ -284,14 +279,6 @@ AI provides deeper analysis → Solution discovered → AI congratulates and sum
 
 ---
 
-## Technical Requirements Compliance
 
-✅ **Platform**: Web-based application  
-✅ **Google Cloud**: Firestore + Gemini AI  
-✅ **GitLab**: Webhooks + Issues + Repository APIs  
-✅ **Original Work**: Created during contest period  
-✅ **Public Repository**: Open source with complete code  
-✅ **Demo Video**: Functionality demonstration  
-✅ **Working Application**: Hosted and accessible  
 
 **Built for Google AI in Action Hackathon 2025 - Accelerating Software Development with AI**
