@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubber Duck AI - GitLab Integration Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }          
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+           line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+          .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .duck-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h2 {
+            color: #4a5568;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            font-size: 1.8rem;
+        }
+        
+        .step {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .step-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #fed7d7;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #c53030;
+            font-weight: bold;
+        }
+        
+        .success {
+            background: #c6f6d5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #276749;
+            font-weight: bold;
+        }
+        
+        .warning {
+            background: #fefcbf;
+            border: 1px solid #f6e05e;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #744210;
+        }
+        
+        .info {
+            background: #bee3f8;
+            border: 1px solid #63b3ed;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #2c5282;
+        }
+        
+        .webhook-url {
+            background: #2d3748;
+            color: #4fd1c7;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .feature-list li:before {
+            content: "✅";
+            margin-right: 10px;
+        }
+          .footer {
+            text-align: center;
+            color: white;
+            opacity: 0.8;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .btn:hover {
+            background: #5a67d8;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .collapsible {
+            background: #4a5568;
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .collapsible:hover {
+            background: #2d3748;
+        }
+        
+        .collapsible:after {
+            content: '\002B';
+            color: white;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+        
+        .collapsible.active:after {
+            content: "\2212";
+        }
+        
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: white;
+            border-radius: 0 0 8px 8px;
+        }
+        
+        .collapsible-content.active {
+            max-height: 1000px;
+        }
+          /* Floating Navigation Header */
+        .floating-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(102, 126, 234, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 10px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .floating-nav.visible {
+            transform: translateY(0);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-item {
+            position: relative;
+        }
+        
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Mobile Navigation */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(102, 126, 234, 0.98);
+                flex-direction: column;
+                padding: 20px;
+                gap: 10px;
+                transform: translateY(-20px);
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+            
+            .nav-menu.open {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            .nav-toggle {
+                display: block;
+            }
+            
+            .nav-link {
+                display: block;
+                text-align: center;
+            }
+        }
+        
+        /* Smooth scroll offset for fixed header */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .section {
+            scroll-margin-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+                padding-top: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Navigation -->
+    <nav class="floating-nav" id="floatingNav">
+        <div class="nav-container">
+            <a href="#top" class="nav-logo">
+                <span>🦆</span>
+                <span>Rubber Duck AI</span>
+            </a>            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#getting-started" class="nav-link">Setup & Getting Started</a></li>
+                <li class="nav-item"><a href="#technology-stack" class="nav-link">Technology Stack</a></li>
+                <li class="nav-item"><a href="#how-it-helps" class="nav-link">How It Helps</a></li>
+                <li class="nav-item"><a href="#example" class="nav-link">Example</a></li>
+                <li class="nav-item"><a href="#troubleshooting" class="nav-link">Troubleshooting</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle">☰</button>
+        </div>
+    </nav>
+
+    <div class="container">        <div class="header" id="top">
+            <div class="duck-emoji">🦆</div>            <h1>Rubber Duck AI</h1>
+            <p>Your Interactive Problem-Solving Companion</p>
+            
+            <!-- Repository Links -->
+            <div style="margin: 20px 0; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="https://github.com/your-username/rubber-duck-ai" target="_blank" class="btn" style="background: #333; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    GitHub Repository
+                </a>
+                <a href="https://gitlab.com/your-username/rubber-duck-ai" target="_blank" class="btn" style="background: #FC6D26; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.146 0H7.854L4.896 6.664H2.187L1.434 8.853L7.85 15.196c.05.055.122.055.172 0l6.416-6.343L13.685 6.664h-2.709L8.146 0zM7.416 1.381h1.168L9.685 5.282H6.315L7.416 1.381zM1.969 7.664h1.718l.746-1H3.715l-.746 1zM8 13.817l-4.97-4.92 1.348-1.334L8 11.185l3.622-3.622 1.348 1.334L8 13.817z"/>
+                    </svg>
+                    GitLab Repository
+                </a>
+            </div>
+            
+            <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-top: 20px;">
+                <p style="font-size: 1.1rem; margin-bottom: 10px;">🏆 <strong>Google AI in Action Hackathon 2025</strong></p>
+                <p style="font-size: 1rem; opacity: 0.9;">🚀 GitLab Challenge Submission</p>
+            </div>
+        </div>        <div class="card section" id="about">
+            <h2>🎯 What is Rubber Duck AI?</h2>
+            <p>Rubber Duck AI is your intelligent debugging companion that helps you solve problems through <strong>guided questioning</strong> and <strong>step-by-step analysis</strong>. Instead of just giving you answers, it asks the right questions to help you think through your problem systematically, just like explaining your code to a rubber duck!</p>
+            
+            <div class="warning" style="background: #fff3cd; border-color: #ffeaa7; color: #856404;">
+                <strong>🏆 Hackathon Project:</strong> This project was developed for <strong>Google's AI in Action Hackathon 2025</strong> as part of the <strong>GitLab Challenge</strong>. It demonstrates how AI can enhance developer productivity through intelligent, interactive problem-solving within GitLab's ecosystem.
+            </div>
+            
+            <div class="info">
+                <strong>🧠 The Philosophy:</strong> Often, the best way to solve a problem is to explain it step by step. Our AI guides you through this process by asking targeted questions that help you discover the solution yourself.
+            </div>
+            
+            <div class="info">
+                <strong>🚀 How to Call Rubber Duck AI:</strong> Simply create an issue in your GitLab repository with a title containing <span class="highlight">"Rubber Duck Help Me"</span> and our AI will automatically respond to guide you through solving your problem. The AI monitors your repository and jumps in whenever you need help!
+            </div>
+
+            <ul class="feature-list">
+                <li><strong>GitLab Integration:</strong> Works seamlessly within your existing GitLab workflow</li>
+                <li><strong>Interactive Problem Solving:</strong> AI asks clarifying questions to understand your issue</li>
+                <li><strong>Step-by-Step Guidance:</strong> Breaks down complex problems into manageable steps</li>
+                <li><strong>Socratic Method:</strong> Helps you discover solutions through guided thinking</li>
+                <li><strong>Smart Hints:</strong> Provides hints and explanations when you're truly stuck</li>
+                <li><strong>Code Context Analysis:</strong> Understands your repository for relevant suggestions</li>
+                <li><strong>Persistent Conversations:</strong> Continues the discussion across multiple comments</li>
+                 </ul>
+        </div><div class="grid">            <div class="card section" id="setup">
+                <h2>🔧 Technical Setup & Configuration</h2>
+                
+                <div class="step">
+                    <h3>⚙️ Webhook Configuration</h3>
+                    <p><strong>1.</strong> Go to your GitLab repository → <strong>Settings</strong> → <strong>Webhooks</strong></p>
+                    <p><strong>2.</strong> Add webhook URL:</p>
+                    <div class="webhook-url">https://your-domain.com/webhook</div>
+                    <p><strong>3.</strong> Enable triggers: Issues events, Comments, Merge request events</p>
+                    <p><strong>4.</strong> Set Secret Token for security:</p>
+                    <div class="code-block">Secret Token: your-secure-webhook-token-here</div>
+                    <div class="info">
+                        <strong>💡 Security:</strong> Use GitLab's built-in Secret Token field instead of environment variables. This token will be sent as <code>X-Gitlab-Token</code> header with each webhook request.
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3>👥 Repository Access</h3>
+                    <p>For private repositories, add the bot user with Reporter/Developer permissions:</p>
+                    <div class="code-block">Username: rubber-duck-ai-bot</div>
+                </div>
+
+
+            </div>            <div class="card section" id="getting-started">
+                <h2>⚙️ Getting Started</h2>
+                
+                <div class="step">
+                    <h3><span class="step-number">1</span>Create Your First Issue</h3>
+                    <p>Start with any problem you're facing:</p>
+                    <div class="code-block">Rubber Duck Help Me: [Describe your challenge]</div>
+                    <div class="info">
+                        <strong>💡 Example titles:</strong><br>
+                        • "Rubber Duck Help Me: API returns 500 error randomly"<br>
+                        • "Rubber Duck Help Me: CSS animation not working on mobile"<br>
+                        • "Rubber Duck Help Me: Database query is too slow"
+                    </div>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">2</span>Engage in the Process</h3>
+                    <p>Remember, this is a <strong>conversation</strong>, not a one-time question:</p>
+                    <ul>
+                        <li>🔄 Respond to the AI's questions</li>
+                        <li>🧪 Try the suggested experiments</li>
+                        <li>📊 Share your findings</li>
+                        <li>🤔 Ask clarifying questions</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <h3><span class="step-number">3</span>Learn and Grow</h3>
+                    <p>Each session teaches you:</p>
+                    <ul>
+                        <li>🔍 <strong>Better debugging techniques</strong></li>
+                        <li>🧠 <strong>How to break down complex problems</strong></li>
+                        <li>❓ <strong>What questions to ask yourself</strong></li>
+                        <li>🎯 <strong>Systematic problem-solving approaches</strong></li>
+                    </ul>                </div>
+            </div>
+        </div>
+
+        <div class="card section" id="technology-stack">
+            <h2>🔧 Technology Stack</h2>
+            <p>Rubber Duck AI is built using cutting-edge Google Cloud technologies and modern development tools to provide a robust, scalable, and intelligent problem-solving experience.</p>
+            
+            <div class="step">
+                <h3>🤖 AI & Machine Learning</h3>
+                <ul class="feature-list" style="list-style: none; padding: 0;">
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">🧠</span>
+                        <div>
+                            <strong>Google Gemini AI</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">Advanced natural language processing and reasoning capabilities for interactive problem-solving</span>
+                        </div>
+                    </li>
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">☁️</span>
+                        <div>
+                            <strong>Google Cloud AI Platform</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">Scalable infrastructure for AI model deployment and management</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>💾 Database & Storage</h3>
+                <ul class="feature-list" style="list-style: none; padding: 0;">
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">🔥</span>
+                        <div>
+                            <strong>Google Cloud Firestore</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">NoSQL document database for storing conversation history, user interactions, and project context</span>
+                        </div>
+                    </li>
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">🗄️</span>
+                        <div>
+                            <strong>Google Cloud Storage</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">Secure storage for logs, analytics data, and application assets</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>🌐 Backend & Integration</h3>
+                <ul class="feature-list" style="list-style: none; padding: 0;">
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">🐍</span>
+                        <div>
+                            <strong>Python 3.12+</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">Core programming language with async/await support for high-performance processing</span>
+                        </div>
+                    </li>
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">🌶️</span>
+                        <div>
+                            <strong>Flask Web Framework</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">Lightweight web framework for handling webhook endpoints and API responses</span>
+                        </div>
+                    </li>
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">🦊</span>
+                        <div>
+                            <strong>GitLab Webhooks API</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">Real-time integration with GitLab for issue monitoring and automated responses</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>🔐 Security & Authentication</h3>
+                <ul class="feature-list" style="list-style: none; padding: 0;">
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">🔑</span>
+                        <div>
+                            <strong>Google Cloud IAM</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">Identity and Access Management for secure service-to-service authentication</span>
+                        </div>
+                    </li>
+                    <li style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="font-size: 1.5rem; margin-right: 15px;">🛡️</span>
+                        <div>
+                            <strong>Webhook Security Tokens</strong><br>
+                            <span style="color: #666; font-size: 0.9rem;">Secure webhook validation using GitLab's built-in token system</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="info">
+                <strong>🏗️ Architecture Highlights:</strong> Built with a microservices approach, leveraging Google Cloud's serverless technologies for automatic scaling, high availability, and cost-effective operation. The system processes GitLab webhook events in real-time and uses Gemini AI's advanced reasoning capabilities to provide contextual, interactive problem-solving assistance.
+            </div>
+        </div>
+
+        <div class="card section" id="how-it-helps">
+            <h2>🚀 How Rubber Duck AI Helps You</h2>
+            
+            <div class="step">
+                <h3><span class="step-number">1</span>You Present Your Problem</h3>
+                <p>Create an issue describing what you're trying to solve or what's not working. Don't worry about having all the details - just explain what you know!</p>
+                <div class="code-block">Rubber Duck Help Me: My user authentication keeps failing</div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">2</span>AI Asks Clarifying Questions</h3>
+                <p>The Rubber Duck AI will analyze your problem and ask targeted questions to understand the issue better:</p>
+                <ul>
+                    <li>🤔 "What error messages are you seeing?"</li>
+                    <li>🔍 "Which authentication method are you using?"</li>
+                    <li>📊 "Can you show me the relevant code section?"</li>
+                    <li>🧪 "What have you already tried to fix this?"</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">3</span>Step-by-Step Problem Solving</h3>
+                <p>As you answer the questions, the AI guides you through a systematic approach:</p>
+                <ul>
+                    <li>🎯 <strong>Problem Isolation:</strong> "Let's check if the issue is with login validation or session management"</li>
+                    <li>� <strong>Hypothesis Testing:</strong> "Try this small test to verify our assumption"</li>
+                    <li>📝 <strong>Evidence Gathering:</strong> "What does the console log show when this happens?"</li>
+                    <li>🛠️ <strong>Solution Building:</strong> "Based on what we found, here's what we should try next"</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">4</span>Hints When You're Stuck</h3>
+                <p>If you can't figure out the next step, the AI provides helpful hints and explanations:</p>
+                <div class="warning">
+                    <strong>🔍 Example Hint:</strong> "It sounds like the issue might be related to session cookies. Try checking if the 'Set-Cookie' header is being sent properly. Look for the 'SameSite' attribute - it might be blocking your authentication in certain browsers."
+                </div>
+            </div>
+
+            <div class="step">
+                <h3><span class="step-number">5</span>Solution Discovery</h3>
+                <p>Through this interactive process, you either:</p>
+                <ul>
+                    <li>✅ <strong>Discover the solution yourself</strong> (the best outcome!)</li>
+                    <li>💡 <strong>Get a clear direction</strong> with specific next steps</li>
+                    <li>🧠 <strong>Learn the debugging process</strong> for similar future problems</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card" id="example">
+            <h2>� Example Conversation</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0;">
+                <div style="background: #e3f2fd; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+                    <strong>👤 You:</strong> Rubber Duck Help Me: My React component won't re-render when state changes
+                </div>
+                
+                <div style="background: #fff3e0; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+                    <strong>🦆 Rubber Duck AI:</strong> I'd be happy to help you debug this re-rendering issue! Let me ask a few questions to understand what's happening:
+                    
+                    <br><br>1. Are you using useState or useReducer to manage this state?
+                    <br>2. Can you show me how you're updating the state?
+                    <br>3. Are you directly mutating the state object/array, or creating a new one?
+                </div>
+                
+                <div style="background: #e3f2fd; padding: 10px; border-radius: 6px; margin-bottom: 15px;">
+                    <strong>👤 You:</strong> I'm using useState. I have an array of items and I'm doing: items.push(newItem) then setItems(items)
+                </div>
+                
+                <div style="background: #fff3e0; padding: 10px; border-radius: 6px;">
+                    <strong>🦆 Rubber Duck AI:</strong> Ah, I think I see the issue! You're mutating the existing array with push(), which means React doesn't detect that the state has changed (since it's the same array reference).
+                    
+                    <br><br>Can you try this instead: <code>setItems([...items, newItem])</code>
+                    
+                    <br><br>This creates a new array, which React will recognize as a state change. Does that fix the re-rendering?
+                </div>
+            </div>
+        </div>          <div class="card section" id="troubleshooting">
+            <h2>🛠️ Troubleshooting</h2>
+            
+            <div class="step">
+                <h3>Common Issues</h3>
+                <ul>
+                    <li><strong>AI not responding:</strong> Ensure issue title contains "Rubber Duck Help Me"</li>
+                    <li><strong>Permission denied:</strong> Check bot user has repository access (for private repos)</li>
+                    <li><strong>Webhook not working:</strong> Verify webhook URL and triggers are configured</li>
+                    <li><strong>Getting generic responses:</strong> Provide more specific details about your problem</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <h3>Testing Your Setup</h3>
+                <p>Create a test issue: <em>"Rubber Duck Help Me: Testing my setup - can you help me understand how this works?"</em></p>
+                <p>You should receive an interactive response that guides you through the process.</p>
+            </div>
+        </div>        <div class="footer">
+            <p>🦆 Rubber Duck AI - Your partner in systematic problem-solving!</p>
+            <p>Remember: The goal isn't just to fix the bug, but to learn how to think through problems step by step.</p>
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+                <p style="font-size: 0.9rem; margin-bottom: 5px;">🏆 <strong>Google AI in Action Hackathon 2025</strong></p>
+                <p style="font-size: 0.8rem; opacity: 0.8;">GitLab Challenge - Enhancing Developer Experience with AI</p>
+            </div>
+        </div>        <script>
+            // Collapsible functionality (existing)
+            var coll = document.getElementsByClassName("collapsible");
+            var i;
+
+            for (i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                    this.classList.toggle("active");
+                    var content = this.nextElementSibling;
+                    if (content.classList.contains("active")) {
+                        content.classList.remove("active");
+                    } else {
+                        content.classList.add("active");
+                    }
+                });
+            }
+
+            // Floating navigation functionality
+            document.addEventListener('DOMContentLoaded', function() {
+                const floatingNav = document.getElementById('floatingNav');
+                const navToggle = document.getElementById('navToggle');
+                const navMenu = document.getElementById('navMenu');
+                const navLinks = document.querySelectorAll('.nav-link');
+                  // Always show floating nav after scrolling past header
+                function updateNavVisibility() {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (scrollTop > 200) {
+                        // Always show nav when scrolled past 200px
+                        floatingNav.classList.add('visible');
+                    } else {
+                        // Hide nav when at top
+                        floatingNav.classList.remove('visible');
+                    }
+                }
+                
+                window.addEventListener('scroll', updateNavVisibility);
+                
+                // Mobile menu toggle
+                navToggle.addEventListener('click', function() {
+                    navMenu.classList.toggle('open');
+                });
+                
+                // Smooth scrolling for navigation links
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            const offsetTop = targetElement.offsetTop - 80; // Account for fixed header
+                            
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth'
+                            });
+                            
+                            // Close mobile menu if open
+                            navMenu.classList.remove('open');
+                        }
+                    });
+                });
+                
+                // Highlight active section in navigation
+                function highlightActiveSection() {
+                    const sections = document.querySelectorAll('.section');
+                    const scrollPos = window.pageYOffset + 100;
+                    
+                    sections.forEach(section => {
+                        const top = section.offsetTop;
+                        const bottom = top + section.offsetHeight;
+                        const id = section.getAttribute('id');
+                        const navLink = document.querySelector(`.nav-link[href="#${id}"]`);
+                        
+                        if (scrollPos >= top && scrollPos <= bottom) {
+                            // Remove active class from all links
+                            navLinks.forEach(link => link.classList.remove('active'));
+                            // Add active class to current section link
+                            if (navLink) {
+                                navLink.classList.add('active');
+                            }
+                        }
+                    });
+                }
+                
+                // Add active class styling
+                const style = document.createElement('style');
+                style.textContent = `
+                    .nav-link.active {
+                        background: rgba(255,255,255,0.3);
+                        font-weight: bold;
+                    }
+                `;
+                document.head.appendChild(style);
+                
+                window.addEventListener('scroll', highlightActiveSection);
+                highlightActiveSection(); // Initial call
+            });
+        </script>
+    </div>
+</body>
+</html>

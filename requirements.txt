@@ -1,0 +1,5 @@
+python-gitlab
+google-generativeai
+Flask
+python-dotenv
+google-cloud-firestore
