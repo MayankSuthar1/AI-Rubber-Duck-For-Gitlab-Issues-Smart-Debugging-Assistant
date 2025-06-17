@@ -118,6 +118,9 @@ def gitlab_webhook():
         
         # Prevent processing comments made by the bot itself
         note_body = note_attributes.get('note', '')
+        print("note_body --------- start ---------")
+        print(note_body)
+        print("note_body --------- end ---------")
         if (note_body.startswith(BOT_SIGNATURE) or 
             note_body.startswith("<!-- AI Rubber Duck -->") or 
             note_body.startswith("**Sended By AI Rubber Duck:**") or 

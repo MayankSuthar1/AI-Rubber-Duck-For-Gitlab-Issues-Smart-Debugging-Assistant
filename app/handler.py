@@ -155,8 +155,11 @@ def process_issue_event(webhook_data):
         logging.info(f"Issue title '{issue_title}' does not trigger rubber duck, and no prior bot interaction found. Skipping event type '{event_type}'.")
         return {"status": "skipped", "message": "Not a rubber duck session."}
 
-    logging.info(f"Rubber duck session active for issue: {issue_title} (event type: {event_type})")    # Prevent bot from replying to its own comments
+    logging.info(f"Rubber duck session active for issue: {issue_title} (event type: {event_type})") 
+       # Prevent bot from replying to its own comments
+       
     if comments and comments[0]['body'].startswith(BOT_SIGNATURE):
+        print(comments[0]['body'])
         logging.info(f"The last comment on issue {issue_iid} was already made by the AI Bot. Skipping to avoid loops.")
         return {"status": "skipped", "message": "Last comment by bot."}
     

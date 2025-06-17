@@ -34,7 +34,13 @@ AI Rubber Duck is an intelligent debugging companion that integrates directly in
 
 
 ### Demo & Links
- - **🎬 Demo Video**: [YouTube Link] (< 3 minutes)  
+ - **🎬 Demo Video**: 
+   
+   <video width="640" height="360" controls>
+     <source src="https://youtu.be/PozSE9CDr2E" type="video/mp4">
+     Your browser does not support the video tag.
+   </video>
+   
  - **🌐 Website**: [[Ai Rubber Duck For Gitlab's Issues](https://rubber-duck-ai-957711343120.us-central1.run.app/)]
  - **🎮 Live Demo**: [[Demo Gitlab Repo With Issues and Webhook Configured](https://gitlab.com/MayankSuthar1/test_error_repo_hackathon/-/issues)]
 
