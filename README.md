@@ -56,7 +56,7 @@ To enable the AI Rubber Duck functionality in your GitLab project:
 
 2. **Configure Webhook Details**
    - **URL**: `https://rubber-duck-ai-957711343120.us-central1.run.app/webhook` (or ngrok URL for testing)
-   - **Secret Token**: Use same value as `GITLAB_WEBHOOK_SECRET` should be `nkcuxx7uvUsywxT`
+   - **Secret Token**: Use same value as `GITLAB_WEBHOOK_SECRET` should be `nkcsss7uvUsywxT`
    - **Trigger Events**: Enable the following:
      - ✅ Issues events
      - ✅ Comments (Note events)
