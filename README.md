@@ -1,6 +1,6 @@
 # AI Rubber Duck For Gitlab's Issues - Smart Debugging Assistant
 
-**🏆 Google AI in Action Hackathon 2025 - GitLab Challenge**
+**Google AI in Action Hackathon 2025 - GitLab Challenge**
 
 An AI-powered debugging assistant that helps developers solve problems through interactive questioning directly within GitLab issues. Built with Google Cloud AI and GitLab webhooks to accelerate software development.
 
